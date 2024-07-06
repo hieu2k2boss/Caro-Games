@@ -1,0 +1,14 @@
+A. Game Setup:
+    1. Board: The game is played on a grid that is 10x10 squares.
+    2. Players: There are two players. One player uses "X" and the other uses "O".
+
+B. How to Play:
+    1. Starting the Game
+        Decide who will go first. The first player will place their mark ("X") in an empty square on the grid.
+    2. Taking Turns
+        Players will take turns placing their mark in one of the empty squares.
+        Once a mark is placed, it cannot be moved or removed.
+    3. Winning the Game
+        The first player to get five of their marks in a row (either horizontally, vertically, or diagonally) wins the game.
+    4. Draw
+        If all squares are filled and no player has five marks in a row, the game ends in a draw.
