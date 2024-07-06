@@ -20,8 +20,6 @@ private:
     bool exitGame = false;
     int botChoice = -1;
     int choice ; 
-    std::string playerName;
-
 public:
     Game();
     void startGame();
@@ -29,9 +27,6 @@ public:
     void choiceLevelBot(Menu &mainMenu, Bot &gamePlayer) ;
     bool firstMove();
     void resetConsole(); 
-    void endGame(bool playerWon, bool draw);
-    void updatePlayerScore(int points);
-    void inputPlayerName(); 
     ~Game();
     
 };

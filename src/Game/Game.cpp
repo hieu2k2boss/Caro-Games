@@ -77,12 +77,13 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     }
     else if (botChoice == 2) // Normal bot
     {
-        int simulations = 100; // Number of simulations for Monte Carlo
-        gameBot.playerWithBot2(*board, firstMove(), simulations);
+        int simulations = 10; // Number of simulations for Monte Carlo
+        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations);
     }
     else if (botChoice == 3) // Hard bot
     {
-        gameBot.playerWithBot3(*board, firstMove());
+        int simulations = 100; // Number of simulations for Monte Carlo
+        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations);
     }
     else
     {
@@ -108,12 +109,6 @@ bool Game ::firstMove()
     cin >> firstMoveChoice;
     bool playerFirst = (firstMoveChoice == 1);
     return playerFirst;
-}
-
-void Game::inputPlayerName()
-{
-    cout << "Enter your name: ";
-    cin >> playerName;
 }
 
 Game::~Game(){};

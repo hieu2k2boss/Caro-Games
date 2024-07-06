@@ -55,3 +55,7 @@ void Board::undoMove(){
         moveHistory.pop(); // Xóa nước đi khỏi stack
     }
 };
+
+
+
+

@@ -19,8 +19,7 @@ public:
     bool makeMonteCarloMove(Board &board, int simulations);
     bool simulateGame(Board &board, int x, int y);
     void playerWithBot1(Board &board, bool playerFirst);
-    void playerWithBot2(Board &board, bool playerFirst, int simulations);
-    void playerWithBot3(Board &board, bool playerFirst);  // If Bot has specific play methods
+    void playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations);
     virtual ~Bot();  // Virtual destructor if Bot will be inherited further
 };
 

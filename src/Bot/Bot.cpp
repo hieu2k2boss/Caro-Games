@@ -174,9 +174,8 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
     }
 }
 
-void Bot::playerWithBot2(Board &board, bool playerFirst, int simulations)
+void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations)
 {
-
     bool gameEnd = false;
     while (!gameEnd)
     {
@@ -188,6 +187,7 @@ void Bot::playerWithBot2(Board &board, bool playerFirst, int simulations)
                 cout << "Invalid move. Try again." << endl;
                 continue;
             }
+            board.display();
             if (checkWinCondition(x, y, board))
             {
                 board.display();
@@ -239,9 +239,6 @@ void Bot::playerWithBot2(Board &board, bool playerFirst, int simulations)
     }
 }
 
-void Bot::playerWithBot3(Board &board, bool playerFirst)
-{
-    cout <<"Bot 3 MinMax" <<endl; 
-}
+
 
 Bot::~Bot() {}

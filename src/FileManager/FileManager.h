@@ -3,22 +3,28 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <windows.h>
+#include <vector>
 
 class FileManager
 {
 private:
     std::ifstream file;
-    std::string line; // Khởi tạo biến line ở đây
-    bool checkFile=true; 
+    std::string line;
+    bool checkFile = true;
+    string pathFile = "H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\Status\\" ; 
 public:
     FileManager(/* args */);
-    void recordPlayerInfo(); 
-    bool isPlayerNameExists(); 
-    void displayTopPlayers(); 
+    void recordPlayerInfo(std::string name, int win, int lose, int draw);
+    void displayTopPlayers();
+    void createFolder(std::string name);
+    void createFile(std::string name, int win, int lose, int draw, int firstPlayer ,int number,int turn, int x, int y, char currentPlayer ,std::vector<std::vector<char>> vec);
+    void updateFileGame(std::string name, int firstPlayer ,int number, int turn, int x, int y,char currentPlayer , std::vector<std::vector<char>> vec);
+    bool showInformation(std::string name);
+    bool checkFolderExist(std::string name); 
+    bool checkFileExist(std::string name); 
     ~FileManager();
     void showGuild();
 };
-
-
 
 #endif
