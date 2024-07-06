@@ -23,7 +23,7 @@ void FileManager::showGuild()
     file.close();
 }
 
-void FileManager::createFolder(string name)
+void FileManager::createFolder(std::string name)
 {
     if (!checkFolderExist(name))
     {
@@ -60,24 +60,24 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
     }
 
     std::string fileStatusGame = pathFile + name + "StatusGame" + to_string(number) + ".txt";
-    std::ofstream outfile(fileStatusGame);
+    std::ofstream outfileGame(fileStatusGame);
 
-    if (outfile.is_open())
+    if (outfileGame.is_open())
     {
-        outfile << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
-        outfile << "Turn: " + to_string(turn) + "\n";
-        outfile << "Current Player: " + to_string(currentPlayer) + "\n";
-        outfile << "x,y" + to_string(x) + " " + to_string(y) + "\n";
+        outfileGame << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
+        outfileGame << "Turn: " + to_string(turn) + "\n";
+        outfileGame << "Current Player: " + to_string(currentPlayer) + "\n";
+        outfileGame << "x,y" + to_string(x) + " " + to_string(y) + "\n";
         for (const auto &row : vec)
         {
             for (const auto &elem : row)
             {
-                outfile << elem << " ";
+                outfileGame << elem << " ";
             }
-            outfile << "\n";
+            outfileGame << "\n";
         }
-        outfile << "\n";
-        outfile.close();
+        outfileGame << "\n";
+        outfileGame.close();
     }
     else
     {
@@ -107,7 +107,7 @@ void FileManager::updateFileGame(std::string name, int firstPlayer, int number, 
     }
 }
 
-bool FileManager::checkFolderExist(string name)
+bool FileManager::checkFolderExist(std::string name)
 {
 
     std::string path = pathFile; // Thư mục hiện tại
@@ -145,7 +145,7 @@ bool FileManager::checkFolderExist(string name)
     return 0;
 }
 
-bool FileManager::checkFileExist(string name)
+bool FileManager::checkFileExist(std::string name)
 {
     std::ifstream infile(name);
     return 1;

@@ -12,7 +12,7 @@ private:
     std::ifstream file;
     std::string line;
     bool checkFile = true;
-    string pathFile = "H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\Status\\" ; 
+    std::string pathFile = "H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\Status\\" ; 
 public:
     FileManager(/* args */);
     void recordPlayerInfo(std::string name, int win, int lose, int draw);
