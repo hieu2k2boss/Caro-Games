@@ -43,7 +43,7 @@ void FileManager::createFolder(std::string name)
 void FileManager::createFile(std::string name, int win, int lose, int draw, int number, int firstPlayer, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec)
 {
 
-    std::string filePlayer = pathFile + "\\" + name + "\\informationPlayer.txt";
+    std::string filePlayer = pathFile + name + "\\informationPlayer.txt";
     std::ofstream outfile(filePlayer);
 
     if (outfile.is_open())
@@ -59,15 +59,19 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
         std::cerr << "Don't create file \"" << filePlayer << "\"." << std::endl;
     }
 
-    std::string fileStatusGame = pathFile + "\\" + name + "\\StatusGame" + to_string(number) + ".txt";
+    std::string fileStatusGame = pathFile + name + "\\StatusGame" + to_string(number) + ".txt";
     std::ofstream outfileGame(fileStatusGame);
 
     if (outfileGame.is_open())
     {
-        outfileGame << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
-        outfileGame << "Turn: " + to_string(turn) + "\n";
-        outfileGame << "Current Player: " + to_string(currentPlayer) + "\n";
-        outfileGame << "x,y " + to_string(x) + " " + to_string(y) + "\n";
+        outfileGame << firstPlayer; // Nếu là 1: X     0: O
+        outfileGame << "\n";
+        outfileGame << turn;
+        outfileGame << "\n";
+        outfileGame << currentPlayer;
+        outfileGame << "\n";
+        outfileGame << x << ' ' << y;
+        outfileGame << "\n";
         for (const auto &row : vec)
         {
             for (const auto &elem : row)
@@ -87,24 +91,38 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
 
 void FileManager::updateFileGame(std::string name, int firstPlayer, int number, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec)
 {
-    std::ofstream outfile(pathFile + "\\" + name + " \\StatusGame" + to_string(number) + ".txt", std::ios::app); // Mở tệp tin để ghi tiếp vào cuối tệp
-    if (outfile.is_open())
+    std::ofstream outfile;
+    std ::string pathFileStatus = pathFile + name + "\\StatusGame" + to_string(number) + ".txt";
+
+    outfile.open(pathFileStatus, std::ios::app);
+
+    // Kiểm tra xem file có mở thành công không
+    if (!outfile.is_open())
     {
-        outfile << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
-        outfile << "Turn: " + to_string(turn) + "\n";
-        outfile << "Current Player: " + to_string(currentPlayer) + "\n";
-        outfile << "x,y " + to_string(x) + " " + to_string(y) + "\n";
-        for (const auto &row : vec)
-        {
-            for (const auto &elem : row)
-            {
-                outfile << elem << " ";
-            }
-            outfile << "\n";
-        }
-        outfile << "\n";
-        outfile.close();
+        std::cout << "Don't open file!" << std::endl;
     }
+
+    outfile << firstPlayer; // Nếu là 1: X     0: O
+    outfile << "\n";
+    outfile << turn;
+    outfile << "\n";
+    outfile << currentPlayer;
+    outfile << "\n";
+    outfile << x << ' ' << y;
+    outfile << "\n";
+
+    for (const auto &row : vec)
+    {
+        for (auto num : row)
+        {
+            outfile << num;
+        }
+
+        outfile << "\n"; // Xuống dòng sau mỗi hàng
+    }
+    outfile << "\n";
+    // Đóng file
+    outfile.close();
 }
 
 bool FileManager::checkFolderExist(std::string name)
@@ -198,10 +216,9 @@ void FileManager::recordPlayerInfo(std::string name, int win, int lose, int draw
     }
 }
 
-void FileManager::showInformation()
-{
+void FileManager::showInformation(){
     std::string namePlayer;
-    std::vector<std::string> listFile = listDirectoriesInDirectory(pathFile);
+    listFile = listDirectoriesInDirectory(pathFile);
     std::cout << "List Player ! " << endl;
     for (const auto &file : listFile)
     {
@@ -214,11 +231,11 @@ void FileManager::showInformation()
 
     if (checkFilePlayer)
     {
-        #ifdef _WIN32
-            system("CLS");
-        #else
-            system("clear");
-        #endif
+#ifdef _WIN32
+        system("CLS");
+#else
+        system("clear");
+#endif
         std::cout << "Successful !" << std::endl;
         file.open(pathFile + "\\" + namePlayer + "\\informationPlayer.txt", std::ios::binary);
 
@@ -240,6 +257,112 @@ void FileManager::showInformation()
     }
 }
 
+void FileManager::deleteFolder()
+{
+}
+
+void FileManager::showMatch()
+{
+    int number;
+    std::string namePlayer;
+    listFile = listDirectoriesInDirectory(pathFile);
+    std::cout << "List Player ! " << endl;
+    for (const auto &file : listFile)
+    {
+        std::cout << file << std::endl;
+    }
+
+    std::cout << "Enter the player information you want to find ! ";
+    std::cin >> namePlayer;
+    std::cout << "What match ? " << endl;
+    std::cin >> number;
+
+    std::ifstream inputFile(pathFile + namePlayer + "\\StatusGame" + to_string(number) + ".txt");
+
+    if (!inputFile)
+    {
+        std::cerr << "Unable to open file";
+    }
+
+    std::vector<Record> records;
+    Record record;
+
+    // Read all records from the file
+    while (readRecord(inputFile, record))
+    {
+        records.push_back(record);
+        // Re-initialize the record for the next read
+        record = Record();
+    }
+
+    inputFile.close();
+
+    // Output the read values to verify
+    for (const auto &rec : records)
+    {
+        std::cout << "First Player: " << rec.firstPlayer << std::endl;
+        std::cout << "Turn: " << rec.turn << std::endl;
+        std::cout << "Current Player: " << rec.currentPlayer << std::endl;
+        std::cout << "Coordinates: (" << rec.x << "," << rec.y << ")" << std::endl;
+        std::cout << "Matrix:" << std::endl;
+        for (const auto &row : rec.matrix)
+        {
+            for (const auto &cell : row)
+            {
+                std::cout << cell;
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+}
+
+bool FileManager::readRecord(std::ifstream &inputFile, Record &record)
+{
+    std::string line;
+
+    // Read firstPlayer, turn, currentPlayer, and coordinates x, y
+    if (!std::getline(inputFile, line))
+        return false;
+    record.firstPlayer = std::stoi(line);
+
+    if (!std::getline(inputFile, line))
+        return false;
+    record.turn = std::stoi(line);
+
+    if (!std::getline(inputFile, line))
+        return false;
+    record.currentPlayer = line[0];
+
+    if (!std::getline(inputFile, line))
+        return false;
+    std::istringstream coordStream(line);
+    coordStream >> record.x >> record.y;
+
+    // Read the 10x10 matrix
+    for (int i = 0; i < 10; ++i)
+    {
+        if (!std::getline(inputFile, line))
+            return false;
+        for (int j = 0; j < 10; ++j)
+        {
+            if (j < line.size())
+            {
+                record.matrix[i][j] = line[j];
+            }
+            else
+            {
+                record.matrix[i][j] = ' ';
+            }
+        }
+    }
+
+    // Read the empty line separating records
+    std::getline(inputFile, line);
+
+    return true;
+}
+
 std::vector<std::string> FileManager::listDirectoriesInDirectory(const std::string &directoryPath)
 {
     std::vector<std::string> directories;
@@ -247,15 +370,19 @@ std::vector<std::string> FileManager::listDirectoriesInDirectory(const std::stri
     WIN32_FIND_DATA findFileData;
     HANDLE hFind = FindFirstFile(searchPath.c_str(), &findFileData);
 
-    if (hFind == INVALID_HANDLE_VALUE) {
+    if (hFind == INVALID_HANDLE_VALUE)
+    {
         std::cerr << "FindFirstFile failed (" << GetLastError() << ")" << std::endl;
         return directories;
     }
 
-    do {
-        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+    do
+    {
+        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
             std::string dirName = findFileData.cFileName;
-            if (dirName != "." && dirName != "..") { // Bỏ qua các thư mục đặc biệt . và ..
+            if (dirName != "." && dirName != "..")
+            { // Bỏ qua các thư mục đặc biệt . và ..
                 directories.push_back(dirName);
             }
         }

@@ -19,7 +19,6 @@ public:
     Player(int x, int y, char currentPlayer);
     bool makeMove(Board &board);
     bool checkWinCondition(int x, int y, Board &board);
-    bool simulateGame(Board &board, int x, int y);
     void playerWithPlayer(Board &board);
     bool checkDirection(int x, int y, int dx, int dy, char playerSymbol, Board &board);
     void switchPlayer();

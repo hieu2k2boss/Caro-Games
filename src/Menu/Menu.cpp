@@ -11,12 +11,13 @@ int Menu::choiceMainMenu()
     int choice;
     // setColor.SetColor();
     cout << CYAN << "* - - - MAIN MENU - - -*" << RESET << endl;
-    cout << CYAN<< "1."<< RESET << "Play with other player" << endl;
+    cout << CYAN<< "1."<< RESET << " Play with other player" << endl;
     cout << CYAN<< "2."<< RESET << " Play with Bot" << endl;
     cout << CYAN<< "3."<< RESET << " Replay" << endl;
     cout << CYAN<< "4."<< RESET << " Player's Information" << endl;
     cout << CYAN<< "5."<< RESET << " Guild" << endl;
-    cout << CYAN<< "6."<< RESET << " Exit" << endl;
+    cout << CYAN<< "6."<< RESET << " Setting" << endl;
+    cout << CYAN<< "7."<< RESET << " Exit" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
     return choice;

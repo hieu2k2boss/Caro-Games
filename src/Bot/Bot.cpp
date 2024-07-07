@@ -109,8 +109,11 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
     return true;
 }
 
-void Bot::playerWithBot1(Board &board, bool playerFirst)
+void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, std::string name)
 {
+    int turn = 0;
+
+    filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
 
     bool gameEnd = false;
     while (!gameEnd)
@@ -123,6 +126,9 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                 cout << "Invalid move. Try again." << endl;
                 continue;
             }
+            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+            turn++;
+
             if (checkWinCondition(x, y, board))
             {
                 board.display();
@@ -130,9 +136,12 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                 gameEnd = true;
                 break;
             }
+
             switchPlayer();
             if (makeRandomMove(board))
             {
+                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+                turn++;
                 if (checkWinCondition(x, y, board))
                 {
                     board.display();
@@ -140,6 +149,7 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                     gameEnd = true;
                     break;
                 }
+
                 switchPlayer();
             }
         }
@@ -147,6 +157,8 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
         {
             if (makeRandomMove(board))
             {
+                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+                turn++;
                 if (checkWinCondition(x, y, board))
                 {
                     board.display();
@@ -154,6 +166,7 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                     gameEnd = true;
                     break;
                 }
+
                 switchPlayer();
             }
             board.display();
@@ -162,6 +175,8 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                 cout << "Invalid move. Try again." << endl;
                 continue;
             }
+            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+            turn++;
             if (checkWinCondition(x, y, board))
             {
                 board.display();
@@ -169,13 +184,17 @@ void Bot::playerWithBot1(Board &board, bool playerFirst)
                 gameEnd = true;
                 break;
             }
+
             switchPlayer();
         }
     }
 }
 
-void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations)
+void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, std::string name)
 {
+    int turn = 0;
+
+    filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
     bool gameEnd = false;
     while (!gameEnd)
     {
@@ -187,6 +206,8 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 cout << "Invalid move. Try again." << endl;
                 continue;
             }
+            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+            turn++;
             board.display();
             if (checkWinCondition(x, y, board))
             {
@@ -198,6 +219,8 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
             switchPlayer();
             if (makeMonteCarloMove(board, simulations))
             {
+                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+                turn++;
                 if (checkWinCondition(x, y, board))
                 {
                     board.display();
@@ -212,6 +235,8 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
         {
             if (makeMonteCarloMove(board, simulations))
             {
+                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+                turn++;
                 if (checkWinCondition(x, y, board))
                 {
                     board.display();
@@ -227,6 +252,8 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 cout << "Invalid move. Try again." << endl;
                 continue;
             }
+            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
+            turn++;
             if (checkWinCondition(x, y, board))
             {
                 board.display();
@@ -238,7 +265,5 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
         }
     }
 }
-
-
 
 Bot::~Bot() {}

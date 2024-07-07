@@ -26,7 +26,8 @@ void Game::startGame()
             goToBack(*menu);
             break;
         case 3:
-            cout << "Replay functionality not implemented." << endl;
+            getInformationMatch();
+            goToBack(*menu);
             break;
         case 4:
             getInformationPlayer();
@@ -41,6 +42,9 @@ void Game::startGame()
             break;
         }
         case 6:
+            cout << "Setting" << endl;
+            break;
+        case 7:
             exitGame = true;
             cout << "Exiting game." << endl;
             break;
@@ -73,28 +77,27 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     resetConsole();
     botChoice = mainMenu.choicePlayWithBot();
     string name;
-    int win = 0, lose = 0, draw = 0;
+    // int win = 0, lose = 0, draw = 0;
 
     cout << "Enter name player: ";
     cin >> name;
 
     FileManager *file = new FileManager();
     file->createFolder(name);
-    file->createFile(name, win, lose, draw, 1, 1, 1, 1, 1, 'X', board->getGrid());
 
     if (botChoice == 1) // Easy bot
     {
-        gameBot.playerWithBot1(*board, firstMove());
+        gameBot.playerWithBot1(*board, firstMove(), *file, name);
     }
     else if (botChoice == 2) // Normal bot
     {
         int simulations = 10; // Number of simulations for Monte Carlo
-        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations);
+        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else if (botChoice == 3) // Hard bot
     {
         int simulations = 100; // Number of simulations for Monte Carlo
-        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations);
+        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else
     {
@@ -102,6 +105,8 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     }
 
     cout << "Player " << gameBot.getCurrentPlayer() << " wins!" << endl;
+
+    delete file;
 }
 
 void Game::resetConsole()
@@ -125,8 +130,32 @@ bool Game ::firstMove()
 void Game ::getInformationPlayer()
 {
     resetConsole();
+
+    cout << CYAN << "1." << RESET << " Show information player" << endl;
+    cout << CYAN << "2." << RESET << " Top player" << endl;
+
+    cout << "Enter your choice: ";
+    int choiceInformation;
+    cin >> choiceInformation;
     FileManager *file = new FileManager();
-    file->showInformation();
+    if (choiceInformation == 1)
+    {
+        resetConsole();
+        file->showInformation();
+    }
+    else if (choiceInformation == 2)
+    {
+        // Top player
+    }
+
+    delete file;
+}
+
+void Game ::getInformationMatch()
+{
+    resetConsole();
+    FileManager *file = new FileManager();
+    file->showMatch();
     delete file;
 }
 
