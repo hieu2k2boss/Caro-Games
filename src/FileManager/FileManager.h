@@ -5,6 +5,9 @@
 #include <iostream>
 #include <windows.h>
 #include <vector>
+#include <windows.h>
+#include <algorithm>
+
 
 class FileManager
 {
@@ -20,7 +23,8 @@ public:
     void createFolder(std::string name);
     void createFile(std::string name, int win, int lose, int draw, int firstPlayer ,int number,int turn, int x, int y, char currentPlayer ,std::vector<std::vector<char>> vec);
     void updateFileGame(std::string name, int firstPlayer ,int number, int turn, int x, int y,char currentPlayer , std::vector<std::vector<char>> vec);
-    bool showInformation(std::string name);
+    void showInformation();
+    std::vector<std::string> listDirectoriesInDirectory(const std::string& directoryPath);
     bool checkFolderExist(std::string name); 
     bool checkFileExist(std::string name); 
     ~FileManager();

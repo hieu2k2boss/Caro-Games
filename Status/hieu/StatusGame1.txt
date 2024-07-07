@@ -1,0 +1,15 @@
+firstPlayer: 1
+Turn: 1
+Current Player: 88
+x,y 1 1
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+

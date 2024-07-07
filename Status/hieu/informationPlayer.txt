@@ -1,0 +1,4 @@
+Name player: hieu
+Win: 0
+Lose: 0
+Draw: 0

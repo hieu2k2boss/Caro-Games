@@ -9,9 +9,6 @@
 
 
 class Bot : public Player {
-private:
-    
-    
 public:
     Bot(char currentPlayer);
     Bot(int x, int y, char currentPlayer);

@@ -43,7 +43,7 @@ void FileManager::createFolder(std::string name)
 void FileManager::createFile(std::string name, int win, int lose, int draw, int number, int firstPlayer, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec)
 {
 
-    std::string filePlayer = pathFile + name + "informationPlayer.txt";
+    std::string filePlayer = pathFile + "\\" + name + "\\informationPlayer.txt";
     std::ofstream outfile(filePlayer);
 
     if (outfile.is_open())
@@ -59,7 +59,7 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
         std::cerr << "Don't create file \"" << filePlayer << "\"." << std::endl;
     }
 
-    std::string fileStatusGame = pathFile + name + "StatusGame" + to_string(number) + ".txt";
+    std::string fileStatusGame = pathFile + "\\" + name + "\\StatusGame" + to_string(number) + ".txt";
     std::ofstream outfileGame(fileStatusGame);
 
     if (outfileGame.is_open())
@@ -67,7 +67,7 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
         outfileGame << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
         outfileGame << "Turn: " + to_string(turn) + "\n";
         outfileGame << "Current Player: " + to_string(currentPlayer) + "\n";
-        outfileGame << "x,y" + to_string(x) + " " + to_string(y) + "\n";
+        outfileGame << "x,y " + to_string(x) + " " + to_string(y) + "\n";
         for (const auto &row : vec)
         {
             for (const auto &elem : row)
@@ -87,13 +87,13 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
 
 void FileManager::updateFileGame(std::string name, int firstPlayer, int number, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec)
 {
-    std::ofstream outfile(pathFile + name + "StatusGame" + to_string(number) + ".txt", std::ios::app); // Mở tệp tin để ghi tiếp vào cuối tệp
+    std::ofstream outfile(pathFile + "\\" + name + " \\StatusGame" + to_string(number) + ".txt", std::ios::app); // Mở tệp tin để ghi tiếp vào cuối tệp
     if (outfile.is_open())
     {
         outfile << "firstPlayer: " + to_string(firstPlayer) + "\n"; // Nếu là 1: X     0: O
         outfile << "Turn: " + to_string(turn) + "\n";
         outfile << "Current Player: " + to_string(currentPlayer) + "\n";
-        outfile << "x,y" + to_string(x) + " " + to_string(y) + "\n";
+        outfile << "x,y " + to_string(x) + " " + to_string(y) + "\n";
         for (const auto &row : vec)
         {
             for (const auto &elem : row)
@@ -153,7 +153,7 @@ bool FileManager::checkFileExist(std::string name)
 
 void FileManager::recordPlayerInfo(std::string name, int win, int lose, int draw)
 {
-    std::string filePlayer = pathFile + name + "informationPlayer.txt";
+    std::string filePlayer = pathFile + "\\" + name + "\\informationPlayer.txt";
     std::ifstream infile(filePlayer);  // Mở file để đọc
     std::ofstream outfile("temp.txt"); // Tạo một file tạm để lưu nội dung cập nhật
 
@@ -198,22 +198,71 @@ void FileManager::recordPlayerInfo(std::string name, int win, int lose, int draw
     }
 }
 
-bool FileManager::showInformation(std::string name)
+void FileManager::showInformation()
 {
-    std::ifstream file(pathFile + name);
-    if (!file)
+    std::string namePlayer;
+    std::vector<std::string> listFile = listDirectoriesInDirectory(pathFile);
+    std::cout << "List Player ! " << endl;
+    for (const auto &file : listFile)
     {
-        std::cerr << "Unable to open file !!!";
-        return 1;
+        std::cout << file << std::endl;
+    }
+    std::cout << "Enter the player information you want to find ! ";
+    std::cin >> namePlayer;
+
+    bool checkFilePlayer = std::find(listFile.begin(), listFile.end(), namePlayer) != listFile.end();
+
+    if (checkFilePlayer)
+    {
+        #ifdef _WIN32
+            system("CLS");
+        #else
+            system("clear");
+        #endif
+        std::cout << "Successful !" << std::endl;
+        file.open(pathFile + "\\" + namePlayer + "\\informationPlayer.txt", std::ios::binary);
+
+        if (!file)
+        {
+            cerr << "Failed to open file!" << endl;
+            file.close();
+        }
+
+        while (std::getline(file, line))
+        {
+            std::cout << line << std::endl;
+        }
+        file.close();
+    }
+    else
+    {
+        std::cout << "No information found !" << std::endl;
+    }
+}
+
+std::vector<std::string> FileManager::listDirectoriesInDirectory(const std::string &directoryPath)
+{
+    std::vector<std::string> directories;
+    std::string searchPath = directoryPath + "\\*";
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findFileData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        std::cerr << "FindFirstFile failed (" << GetLastError() << ")" << std::endl;
+        return directories;
     }
 
-    std::string line;
-    while (std::getline(file, line))
-    {
-        std::cout << line << std::endl;
-    }
+    do {
+        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            std::string dirName = findFileData.cFileName;
+            if (dirName != "." && dirName != "..") { // Bỏ qua các thư mục đặc biệt . và ..
+                directories.push_back(dirName);
+            }
+        }
+    } while (FindNextFile(hFind, &findFileData) != 0);
 
-    file.close();
+    FindClose(hFind);
+    return directories;
 }
 
 FileManager::~FileManager()

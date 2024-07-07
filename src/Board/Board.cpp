@@ -56,6 +56,8 @@ void Board::undoMove(){
     }
 };
 
-
+const std::vector<std::vector<char>>& Board::getGrid() const {
+    return grid;
+}
 
 

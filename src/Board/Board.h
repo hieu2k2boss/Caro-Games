@@ -5,7 +5,8 @@
 #include <iostream>
 #include <iomanip>
 
-class Board {
+class Board
+{
 private:
     std::vector<std::vector<char>> grid;
     int size;
@@ -18,7 +19,8 @@ public:
     char getCell(int x, int y);
     int getSize();
     void undoMove();
-};
+    const std::vector<std::vector<char>> &getGrid() const;
 
+};
 
 #endif

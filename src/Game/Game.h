@@ -16,6 +16,7 @@ private:
     Board *board;
     Player *p; 
     Bot *bot;
+    
     char back;
     bool exitGame = false;
     int botChoice = -1;
@@ -27,6 +28,7 @@ public:
     void choiceLevelBot(Menu &mainMenu, Bot &gamePlayer) ;
     bool firstMove();
     void resetConsole(); 
+    void getInformationPlayer();
     ~Game();
     
 };

@@ -29,7 +29,8 @@ void Game::startGame()
             cout << "Replay functionality not implemented." << endl;
             break;
         case 4:
-            cout << "Player's Information not implemented." << endl;
+            getInformationPlayer();
+            goToBack(*menu);
             break;
         case 5:
         {
@@ -71,6 +72,16 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
 {
     resetConsole();
     botChoice = mainMenu.choicePlayWithBot();
+    string name;
+    int win = 0, lose = 0, draw = 0;
+
+    cout << "Enter name player: ";
+    cin >> name;
+
+    FileManager *file = new FileManager();
+    file->createFolder(name);
+    file->createFile(name, win, lose, draw, 1, 1, 1, 1, 1, 'X', board->getGrid());
+
     if (botChoice == 1) // Easy bot
     {
         gameBot.playerWithBot1(*board, firstMove());
@@ -109,6 +120,14 @@ bool Game ::firstMove()
     cin >> firstMoveChoice;
     bool playerFirst = (firstMoveChoice == 1);
     return playerFirst;
+}
+
+void Game ::getInformationPlayer()
+{
+    resetConsole();
+    FileManager *file = new FileManager();
+    file->showInformation();
+    delete file;
 }
 
 Game::~Game(){};
