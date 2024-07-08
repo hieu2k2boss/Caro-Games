@@ -42,7 +42,8 @@ void Game::startGame()
             break;
         }
         case 6:
-            cout << "Setting" << endl;
+            Setting();
+            goToBack(*menu);
             break;
         case 7:
             exitGame = true;
@@ -145,7 +146,8 @@ void Game ::getInformationPlayer()
     }
     else if (choiceInformation == 2)
     {
-        // Top player
+        resetConsole();
+        file->displayTopPlayers();
     }
 
     delete file;
@@ -156,6 +158,20 @@ void Game ::getInformationMatch()
     resetConsole();
     FileManager *file = new FileManager();
     file->showMatch();
+    delete file;
+}
+
+void Game ::Setting(){
+    resetConsole();
+    int choiceSetting;
+    FileManager *file = new FileManager();
+    cout << "1. Delete all data !!!" << endl;
+    cout << "Enter your choice: ";
+    cin >> choiceSetting;
+    if (choiceSetting == 1)
+    {
+        file->removeAllFilesAndFolders("H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\Status");
+    }
     delete file;
 }
 

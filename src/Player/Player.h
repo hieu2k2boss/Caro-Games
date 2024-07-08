@@ -13,7 +13,6 @@ protected:
     int x;
     int y;
     char currentPlayer;
-
 public:
     Player(char currentPlayer);
     Player(int x, int y, char currentPlayer);

@@ -44,6 +44,7 @@ void FileManager::createFile(std::string name, int win, int lose, int draw, int 
 {
 
     std::string filePlayer = pathFile + name + "\\informationPlayer.txt";
+    cout << filePlayer; 
     std::ofstream outfile(filePlayer);
 
     if (outfile.is_open())
@@ -171,49 +172,50 @@ bool FileManager::checkFileExist(std::string name)
 
 void FileManager::recordPlayerInfo(std::string name, int win, int lose, int draw)
 {
-    std::string filePlayer = pathFile + "\\" + name + "\\informationPlayer.txt";
-    std::ifstream infile(filePlayer);  // Mở file để đọc
-    std::ofstream outfile("temp.txt"); // Tạo một file tạm để lưu nội dung cập nhật
+    std::string filePlayer = pathFile + name + "\\informationPlayer.txt";
+    std::ifstream infile(filePlayer);
+    std::string line;
+    std::vector<std::string> lines;
+    bool playerFound = false;
 
-    if (infile.is_open() && outfile.is_open())
-    {
-        std::string line;
-        while (std::getline(infile, line))
-        {
-            if (line.find("Win: ") == 0)
-            {
-                outfile << "Win: " << win << "\n";
-            }
-            else if (line.find("Lose: ") == 0)
-            {
-                outfile << "Lose: " << lose << "\n";
-            }
-            else if (line.find("Draw: ") == 0)
-            {
-                outfile << "Draw: " << draw << "\n";
-            }
-            else
-            {
-                outfile << line << "\n"; // Giữ nguyên các dòng không cần cập nhật
-            }
-        }
-        infile.close();
-        outfile.close();
-
-        // Xóa file cũ và đổi tên file tạm thành tên file cũ
-        if (std::remove(filePlayer.c_str()) != 0)
-        {
-            std::cerr << "Remove old file !" << std::endl;
-        }
-        if (std::rename("temp.txt", filePlayer.c_str()) != 0)
-        {
-            std::cerr << "Don't remove old file !" << std::endl;
+    // Đọc nội dung file và lưu vào vector lines
+    while (std::getline(infile, line)) {
+        std::istringstream iss(line);
+        std::string word;
+        iss >> word;
+        
+        if (word == "Name" && iss >> word && word == "player:" && iss >> word && word == name) {
+            // Cập nhật thông tin cho người chơi
+            lines.push_back("Name player: " + name);
+            std::getline(infile, line); // Bỏ qua dòng hiện tại
+            lines.push_back("Win: " + std::to_string(win));
+            std::getline(infile, line); // Bỏ qua dòng hiện tại
+            lines.push_back("Lose: " + std::to_string(lose));
+            std::getline(infile, line); // Bỏ qua dòng hiện tại
+            lines.push_back("Draw: " + std::to_string(draw));
+            playerFound = true;
+        } else {
+            lines.push_back(line);
         }
     }
-    else
-    {
-        std::cerr << "Don't open file \"" << filePlayer << "\" hoặc tạo file tạm." << std::endl;
+
+    infile.close();
+
+    if (!playerFound) {
+        // Nếu người chơi không tồn tại trong file, thêm thông tin mới vào file
+        lines.push_back("Name player: " + name);
+        lines.push_back("Win: " + std::to_string(win));
+        lines.push_back("Lose: " + std::to_string(lose));
+        lines.push_back("Draw: " + std::to_string(draw));
     }
+
+    // Ghi lại nội dung file
+    std::ofstream outfile(filePlayer);
+    for (const auto& l : lines) {
+        outfile << l << std::endl;
+    }
+
+    outfile.close();
 }
 
 void FileManager::showInformation(){
@@ -257,8 +259,37 @@ void FileManager::showInformation(){
     }
 }
 
-void FileManager::deleteFolder()
-{
+void FileManager::removeAllFilesAndFolders(const std::string& directoryPath)
+{ 
+    std::string searchPath = directoryPath + "\\*";
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findFileData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        std::cerr << "Directory does not exist: " << directoryPath << std::endl;
+        return;
+    }
+
+    do {
+        const std::string fileOrDirName = findFileData.cFileName;
+        if (fileOrDirName == "." || fileOrDirName == "..") {
+            continue;
+        }
+
+        std::string fullPath = directoryPath + "\\" + fileOrDirName;
+        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            // Recursively delete sub-directory
+            removeAllFilesAndFolders(fullPath);
+            RemoveDirectory(fullPath.c_str());
+        } else {
+            // Delete file
+            DeleteFile(fullPath.c_str());
+        }
+    } while (FindNextFile(hFind, &findFileData) != 0);
+
+    FindClose(hFind);
+
+    std::cout << "All Data !!!"<< std::endl;
 }
 
 void FileManager::showMatch()
@@ -317,8 +348,7 @@ void FileManager::showMatch()
     }
 }
 
-bool FileManager::readRecord(std::ifstream &inputFile, Record &record)
-{
+bool FileManager::readRecord(std::ifstream &inputFile, Record &record){
     std::string line;
 
     // Read firstPlayer, turn, currentPlayer, and coordinates x, y
@@ -361,6 +391,117 @@ bool FileManager::readRecord(std::ifstream &inputFile, Record &record)
     std::getline(inputFile, line);
 
     return true;
+}
+
+void FileManager::displayTopPlayers()
+{
+    std::string directory = pathFile;
+    std::vector<PlayerGame> players;
+
+    getAllPlayerInfo(directory, players);
+    std::sort(players.begin(), players.end());
+    for (const auto &player : players)
+    {
+        std::cout << "Name player: " << player.name << "\n"
+                  << "Win: " << player.win << "\n"
+                  << "Lose: " << player.lose << "\n"
+                  << "Draw: " << player.draw << "\n\n";
+    }
+}
+
+void FileManager::readPlayerInfo(const std::string &filePath, std::vector<PlayerGame> &players)
+{
+    std::ifstream file(filePath);
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to open file: " << filePath << std::endl;
+        return;
+    }
+
+    PlayerGame player;
+    std::string line;
+    while (std::getline(file, line))
+    {
+        if (line.find("Name player: ") != std::string::npos)
+        {
+            player.name = line.substr(13);
+        }
+        else if (line.find("Win: ") != std::string::npos)
+        {
+            player.win = std::stoi(line.substr(5));
+        }
+        else if (line.find("Lose: ") != std::string::npos)
+        {
+            player.lose = std::stoi(line.substr(6));
+        }
+        else if (line.find("Draw: ") != std::string::npos)
+        {
+            player.draw = std::stoi(line.substr(6));
+        }
+    }
+
+    players.push_back(player);
+}
+
+void FileManager::getAllPlayerInfo(const std::string &directory, std::vector<PlayerGame> &players)
+{
+    std::string searchPath = directory + "\\*";
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findFileData);
+
+    if (hFind == INVALID_HANDLE_VALUE)
+    {
+        std::cerr << "Directory not found: " << directory << std::endl;
+        return;
+    }
+
+    do
+    {
+        const std::string fileOrDir = findFileData.cFileName;
+        if (fileOrDir == "." || fileOrDir == "..")
+        {
+            continue;
+        }
+
+        std::string fullPath = directory + "\\" + fileOrDir;
+        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            getAllPlayerInfo(fullPath, players);
+        }
+        else if (fileOrDir == "informationPlayer.txt")
+        {
+            readPlayerInfo(fullPath, players);
+        }
+    } while (FindNextFile(hFind, &findFileData) != 0);
+
+    FindClose(hFind);
+}
+
+int FileManager::getValue(std ::string name, std::string findLine)
+{
+    std::string filePlayer = pathFile + name + "\\informationPlayer.txt";
+    ifstream file(filePlayer); // Mở file để đọc
+    //cout << filePlayer<<endl; 
+    if (!file.is_open())
+    {
+        cerr << "Don't open this file!" << endl;
+    }
+
+    string line;
+    int win = 0;
+
+    while (getline(file, line))
+    {
+        if (line.find(findLine) != string::npos)
+        {
+            size_t pos = line.find(":");
+            win = stoi(line.substr(pos + 1));
+            break;
+        }
+    }
+
+    file.close();
+    return win;
 }
 
 std::vector<std::string> FileManager::listDirectoriesInDirectory(const std::string &directoryPath)

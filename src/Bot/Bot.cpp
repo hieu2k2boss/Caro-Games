@@ -112,10 +112,13 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
 void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, std::string name)
 {
     int turn = 0;
+    int choiceContinue;
+    int win, lose, draw;
+    int numberTurn;
 
     filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
 
-    bool gameEnd = false;
+    gameEnd = false;
     while (!gameEnd)
     {
         board.display();
@@ -133,8 +136,23 @@ void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, 
             {
                 board.display();
                 cout << "Player " << currentPlayer << " wins!" << endl;
-                gameEnd = true;
-                break;
+                win = filename.getValue(name, "Win:") + 1;
+                lose = filename.getValue(name, "Lose:");
+                draw = filename.getValue(name, "Draw:");
+                filename.recordPlayerInfo(name, win, lose, draw);
+
+                cout << "Do you want to continue playing?" << endl;
+                cout << "Yes: 1 , No:0 " << endl;
+                cin >> choiceContinue;
+                if (choiceContinue == 1)
+                {
+                    board.resetBoard();
+                }
+                else if (choiceContinue == 0)
+                {
+                    gameEnd = true;
+                    break;
+                }
             }
 
             switchPlayer();
@@ -146,10 +164,24 @@ void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, 
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    gameEnd = true;
-                    break;
-                }
+                    win = filename.getValue(name, "Win:");
+                    lose = filename.getValue(name, "Lose:") + 1;
+                    draw = filename.getValue(name, "Draw:");
+                    filename.recordPlayerInfo(name, win, lose, draw);
 
+                    cout << "Do you want to continue playing?" << endl;
+                    cout << "Yes: 1 , No:0 " << endl;
+                    cin >> choiceContinue;
+                    if (choiceContinue == 1)
+                    {
+                        board.resetBoard();
+                    }
+                    else if (choiceContinue == 0)
+                    {
+                        gameEnd = true;
+                        break;
+                    }
+                }
                 switchPlayer();
             }
         }
@@ -163,10 +195,24 @@ void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, 
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    gameEnd = true;
-                    break;
-                }
+                    win = filename.getValue(name, "Win:");
+                    lose = filename.getValue(name, "Lose:") + 1;
+                    draw = filename.getValue(name, "Draw:");
+                    filename.recordPlayerInfo(name, win, lose, draw);
 
+                    cout << "Do you want to continue playing?" << endl;
+                    cout << "Yes: 1 , No:0 " << endl;
+                    cin >> choiceContinue;
+                    if (choiceContinue == 1)
+                    {
+                        board.resetBoard();
+                    }
+                    else if (choiceContinue == 0)
+                    {
+                        gameEnd = true;
+                        break;
+                    }
+                }
                 switchPlayer();
             }
             board.display();
@@ -181,8 +227,22 @@ void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, 
             {
                 board.display();
                 cout << "Player " << currentPlayer << " wins!" << endl;
-                gameEnd = true;
-                break;
+                win = filename.getValue(name, "Win:") + 1;
+                lose = filename.getValue(name, "Lose:");
+                draw = filename.getValue(name, "Draw:");
+                filename.recordPlayerInfo(name, win, lose, draw);
+                cout << "Do you want to continue playing?" << endl;
+                cout << "Yes: 1 , No:0 " << endl;
+                cin >> choiceContinue;
+                if (choiceContinue == 1)
+                {
+                    board.resetBoard();
+                }
+                else if (choiceContinue == 0)
+                {
+                    gameEnd = true;
+                    break;
+                }
             }
 
             switchPlayer();
@@ -193,8 +253,11 @@ void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, 
 void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, std::string name)
 {
     int turn = 0;
+    int win, lose, draw;
+    int choiceContinue;
 
     filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
+    
     bool gameEnd = false;
     while (!gameEnd)
     {
@@ -213,8 +276,24 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
             {
                 board.display();
                 cout << "Player " << currentPlayer << " wins!" << endl;
-                gameEnd = true;
-                break;
+                
+                win = filename.getValue(name, "Win:") + 1;
+                lose = filename.getValue(name, "Lose:");
+                draw = filename.getValue(name, "Draw:");
+                filename.recordPlayerInfo(name, win, lose, draw);
+
+                cout << "Do you want to continue playing?" << endl;
+                cout << "Yes: 1 , No:0 " << endl;
+                cin >> choiceContinue;
+                if (choiceContinue == 1)
+                {
+                    board.resetBoard();
+                }
+                else if (choiceContinue == 0)
+                {
+                    gameEnd = true;
+                    break;
+                }
             }
             switchPlayer();
             if (makeMonteCarloMove(board, simulations))
@@ -225,8 +304,24 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    gameEnd = true;
-                    break;
+                    
+                    win = filename.getValue(name, "Win:");
+                    lose = filename.getValue(name, "Lose:") + 1;
+                    draw = filename.getValue(name, "Draw:");
+                    filename.recordPlayerInfo(name, win, lose, draw);
+
+                    cout << "Do you want to continue playing?" << endl;
+                    cout << "Yes: 1 , No:0 " << endl;
+                    cin >> choiceContinue;
+                    if (choiceContinue == 1)
+                    {
+                        board.resetBoard();
+                    }
+                    else if (choiceContinue == 0)
+                    {
+                        gameEnd = true;
+                        break;
+                    }
                 }
                 switchPlayer();
             }
@@ -241,8 +336,24 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    gameEnd = true;
-                    break;
+                    
+                    win = filename.getValue(name, "Win:");
+                    lose = filename.getValue(name, "Lose:") + 1;
+                    draw = filename.getValue(name, "Draw:");
+                    filename.recordPlayerInfo(name, win, lose, draw);
+
+                    cout << "Do you want to continue playing?" << endl;
+                    cout << "Yes: 1 , No:0 " << endl;
+                    cin >> choiceContinue;
+                    if (choiceContinue == 1)
+                    {
+                        board.resetBoard();
+                    }
+                    else if (choiceContinue == 0)
+                    {
+                        gameEnd = true;
+                        break;
+                    }
                 }
                 switchPlayer();
             }
@@ -258,8 +369,24 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
             {
                 board.display();
                 cout << "Player " << currentPlayer << " wins!" << endl;
-                gameEnd = true;
-                break;
+
+                win = filename.getValue(name, "Win:") + 1;
+                lose = filename.getValue(name, "Lose:");
+                draw = filename.getValue(name, "Draw:");
+                filename.recordPlayerInfo(name, win, lose, draw);
+
+                cout << "Do you want to continue playing?" << endl;
+                cout << "Yes: 1 , No:0 " << endl;
+                cin >> choiceContinue;
+                if (choiceContinue == 1)
+                {
+                    board.resetBoard();
+                }
+                else if (choiceContinue == 0)
+                {
+                    gameEnd = true;
+                    break;
+                }
             }
             switchPlayer();
         }

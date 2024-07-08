@@ -1,4 +1,0 @@
-Name player: hoai
-Win: 0
-Lose: 0
-Draw: 0

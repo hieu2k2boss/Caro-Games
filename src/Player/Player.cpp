@@ -31,7 +31,7 @@ bool Player::checkDirection(int x, int y, int dx, int dy, char playerSymbol, Boa
     int count = 1;
 
     // Check in the positive direction
-    for (int step = 1; step < 4; ++step)
+    for (int step = 1; step < 5; ++step)
     {
         int newX = x + step * dx;
         int newY = y + step * dy;
@@ -46,7 +46,7 @@ bool Player::checkDirection(int x, int y, int dx, int dy, char playerSymbol, Boa
     }
 
     // Check in the negative direction
-    for (int step = 1; step < 4; ++step)
+    for (int step = 1; step < 5; ++step)
     {
         int newX = x - step * dx;
         int newY = y - step * dy;
@@ -60,7 +60,7 @@ bool Player::checkDirection(int x, int y, int dx, int dy, char playerSymbol, Boa
         }
     }
 
-    return count >= 4; // Winning condition for 4 in a row
+    return count >= 5; // Winning condition for 4 in a row
 }
 
 void Player::playerWithPlayer(Board &board)

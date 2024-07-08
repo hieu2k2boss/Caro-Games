@@ -21,6 +21,19 @@ struct Record
     Record() : matrix(10, std::vector<char>(10, ' ')) {}
 };
 
+struct PlayerGame
+{
+    std::string name;
+    int win;
+    int lose;
+    int draw;
+
+    bool operator<(const PlayerGame &other) const
+    {
+        return win > other.win;
+    }
+};
+
 class FileManager
 {
 private:
@@ -38,9 +51,11 @@ public:
     void createFile(std::string name, int win, int lose, int draw, int firstPlayer, int number, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec);
     void updateFileGame(std::string name, int firstPlayer, int number, int turn, int x, int y, char currentPlayer, std::vector<std::vector<char>> vec);
     void showInformation();
-    void deleteFolder();
+    void removeAllFilesAndFolders(const std::string& directoryPath);
     void showMatch();
-    void choiceReturn(int choiceTurn);
+    int getValue(std ::string name, std::string findLine);
+    void readPlayerInfo(const std::string &filePath, std::vector<PlayerGame> &players);
+    void getAllPlayerInfo(const std::string &directory, std::vector<PlayerGame> &players);
     bool readRecord(std::ifstream &inputFile, Record &record);
     std::vector<std::string> listDirectoriesInDirectory(const std::string &directoryPath);
     bool checkFolderExist(std::string name);

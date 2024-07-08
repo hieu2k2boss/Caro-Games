@@ -67,6 +67,23 @@ void Board::undoMove()
     }
 };
 
+void Board::resetBoard()
+{
+    // Đặt lại tất cả các ô trên bảng về trạng thái ban đầu (ký tự trống ' ')
+    for (int i = 0; i < size; ++i)
+    {
+        for (int j = 0; j < size; ++j)
+        {
+            grid[i][j] = ' ';
+        }
+    }
+    // Xóa lịch sử các nước đi
+    while (!moveHistory.empty())
+    {
+        moveHistory.pop();
+    }
+}
+
 const std::vector<std::vector<char>> &Board::getGrid() const
 {
 

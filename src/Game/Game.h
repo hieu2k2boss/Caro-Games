@@ -28,6 +28,7 @@ public:
     void choiceLevelBot(Menu &mainMenu, Bot &gamePlayer) ;
     bool firstMove();
     void getInformationMatch();
+    void Setting();
     void resetConsole(); 
     void getInformationPlayer();
     ~Game();
