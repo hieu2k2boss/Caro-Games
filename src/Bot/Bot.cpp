@@ -6,25 +6,10 @@ Bot::Bot(char currentPlayer) : Player(currentPlayer) {}
 
 Bot::Bot(int x, int y, char currentPlayer) : Player(x, y, currentPlayer) {}
 
-bool Bot::makeRandomMove(Board &board)
-{
-    srand(time(0));
-    while (true)
-    {
-        int x = rand() % board.getSize();
-        int y = rand() % board.getSize();
-        if (board.updateBoard(x, y, currentPlayer))
-        {
-            this->x = x;
-            this->y = y;
-            return true;
-        }
-    }
-}
-
 bool Bot::simulateGame(Board &board, int x, int y)
 {
     char player = currentPlayer;
+    vector<pair<int, int>> validMoves;
     while (true)
     {
         if (checkWinCondition(x, y, board))
@@ -33,8 +18,7 @@ bool Bot::simulateGame(Board &board, int x, int y)
         }
         player = (player == 'X') ? 'O' : 'X';
 
-        // Get all valid moves
-        vector<pair<int, int>> validMoves;
+        validMoves.clear();
         for (int i = 0; i < board.getSize(); ++i)
         {
             for (int j = 0; j < board.getSize(); ++j)
@@ -51,7 +35,6 @@ bool Bot::simulateGame(Board &board, int x, int y)
             return false; // Draw
         }
 
-        // Make a random move
         int moveIndex = rand() % validMoves.size();
         x = validMoves[moveIndex].first;
         y = validMoves[moveIndex].second;
@@ -59,12 +42,25 @@ bool Bot::simulateGame(Board &board, int x, int y)
     }
 }
 
+void Bot::simulateMove(Board &board, int x, int y, int simulations, atomic<int> &winCount)
+{
+    for (int j = 0; j < simulations; ++j)
+    {
+        Board simulationBoard = board;
+        simulationBoard.updateBoard(x, y, currentPlayer);
+        if (simulateGame(simulationBoard, x, y))
+        {
+            ++winCount;
+        }
+    }
+}
+
 bool Bot::makeMonteCarloMove(Board &board, int simulations)
 {
-    srand(time(0));
-    vector<pair<int, int>> validMoves;
+    static random_device rd;
+    static mt19937 gen(rd());
 
-    // Get all valid moves
+    vector<pair<int, int>> validMoves;
     for (int i = 0; i < board.getSize(); ++i)
     {
         for (int j = 0; j < board.getSize(); ++j)
@@ -76,23 +72,19 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
         }
     }
 
-    vector<int> winCounts(validMoves.size(), 0);
+    vector<atomic<int>> winCounts(validMoves.size());
+    vector<thread> threads;
 
-    // Simulate each move
     for (int i = 0; i < validMoves.size(); ++i)
     {
-        for (int j = 0; j < simulations; ++j)
-        {
-            Board simulationBoard = board;
-            simulationBoard.updateBoard(validMoves[i].first, validMoves[i].second, currentPlayer);
-            if (simulateGame(simulationBoard, validMoves[i].first, validMoves[i].second))
-            {
-                winCounts[i]++;
-            }
-        }
+        threads.push_back(thread(&Bot::simulateMove, this, ref(board), validMoves[i].first, validMoves[i].second, simulations, ref(winCounts[i])));
     }
 
-    // Find the move with the highest win count
+    for (auto &th : threads)
+    {
+        th.join();
+    }
+
     int bestMoveIndex = 0;
     for (int i = 1; i < winCounts.size(); ++i)
     {
@@ -102,152 +94,10 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
         }
     }
 
-    // Make the best move
-    x = validMoves[bestMoveIndex].first;
-    y = validMoves[bestMoveIndex].second;
+    int x = validMoves[bestMoveIndex].first;
+    int y = validMoves[bestMoveIndex].second;
     board.updateBoard(x, y, currentPlayer);
     return true;
-}
-
-void Bot::playerWithBot1(Board &board, bool playerFirst, FileManager &filename, std::string name)
-{
-    int turn = 0;
-    int choiceContinue;
-    int win, lose, draw;
-    int numberTurn;
-
-    filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
-
-    gameEnd = false;
-    while (!gameEnd)
-    {
-        board.display();
-        if (playerFirst)
-        {
-            if (!makeMove(board))
-            {
-                cout << "Invalid move. Try again." << endl;
-                continue;
-            }
-            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
-            turn++;
-
-            if (checkWinCondition(x, y, board))
-            {
-                board.display();
-                cout << "Player " << currentPlayer << " wins!" << endl;
-                win = filename.getValue(name, "Win:") + 1;
-                lose = filename.getValue(name, "Lose:");
-                draw = filename.getValue(name, "Draw:");
-                filename.recordPlayerInfo(name, win, lose, draw);
-
-                cout << "Do you want to continue playing?" << endl;
-                cout << "Yes: 1 , No:0 " << endl;
-                cin >> choiceContinue;
-                if (choiceContinue == 1)
-                {
-                    board.resetBoard();
-                }
-                else if (choiceContinue == 0)
-                {
-                    gameEnd = true;
-                    break;
-                }
-            }
-
-            switchPlayer();
-            if (makeRandomMove(board))
-            {
-                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
-                turn++;
-                if (checkWinCondition(x, y, board))
-                {
-                    board.display();
-                    cout << "Bot wins!" << endl;
-                    win = filename.getValue(name, "Win:");
-                    lose = filename.getValue(name, "Lose:") + 1;
-                    draw = filename.getValue(name, "Draw:");
-                    filename.recordPlayerInfo(name, win, lose, draw);
-
-                    cout << "Do you want to continue playing?" << endl;
-                    cout << "Yes: 1 , No:0 " << endl;
-                    cin >> choiceContinue;
-                    if (choiceContinue == 1)
-                    {
-                        board.resetBoard();
-                    }
-                    else if (choiceContinue == 0)
-                    {
-                        gameEnd = true;
-                        break;
-                    }
-                }
-                switchPlayer();
-            }
-        }
-        else
-        {
-            if (makeRandomMove(board))
-            {
-                filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
-                turn++;
-                if (checkWinCondition(x, y, board))
-                {
-                    board.display();
-                    cout << "Bot wins!" << endl;
-                    win = filename.getValue(name, "Win:");
-                    lose = filename.getValue(name, "Lose:") + 1;
-                    draw = filename.getValue(name, "Draw:");
-                    filename.recordPlayerInfo(name, win, lose, draw);
-
-                    cout << "Do you want to continue playing?" << endl;
-                    cout << "Yes: 1 , No:0 " << endl;
-                    cin >> choiceContinue;
-                    if (choiceContinue == 1)
-                    {
-                        board.resetBoard();
-                    }
-                    else if (choiceContinue == 0)
-                    {
-                        gameEnd = true;
-                        break;
-                    }
-                }
-                switchPlayer();
-            }
-            board.display();
-            if (!makeMove(board))
-            {
-                cout << "Invalid move. Try again." << endl;
-                continue;
-            }
-            filename.updateFileGame(name, playerFirst, 0, turn, x, y, currentPlayer, board.getGrid());
-            turn++;
-            if (checkWinCondition(x, y, board))
-            {
-                board.display();
-                cout << "Player " << currentPlayer << " wins!" << endl;
-                win = filename.getValue(name, "Win:") + 1;
-                lose = filename.getValue(name, "Lose:");
-                draw = filename.getValue(name, "Draw:");
-                filename.recordPlayerInfo(name, win, lose, draw);
-                cout << "Do you want to continue playing?" << endl;
-                cout << "Yes: 1 , No:0 " << endl;
-                cin >> choiceContinue;
-                if (choiceContinue == 1)
-                {
-                    board.resetBoard();
-                }
-                else if (choiceContinue == 0)
-                {
-                    gameEnd = true;
-                    break;
-                }
-            }
-
-            switchPlayer();
-        }
-    }
 }
 
 void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, std::string name)
@@ -257,7 +107,7 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
     int choiceContinue;
 
     filename.createFile(name, 0, 0, 0, playerFirst, 0, turn, 0, 0, currentPlayer, board.getGrid()); // Tạo file
-    
+
     bool gameEnd = false;
     while (!gameEnd)
     {
@@ -276,7 +126,7 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
             {
                 board.display();
                 cout << "Player " << currentPlayer << " wins!" << endl;
-                
+
                 win = filename.getValue(name, "Win:") + 1;
                 lose = filename.getValue(name, "Lose:");
                 draw = filename.getValue(name, "Draw:");
@@ -304,7 +154,7 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    
+
                     win = filename.getValue(name, "Win:");
                     lose = filename.getValue(name, "Lose:") + 1;
                     draw = filename.getValue(name, "Draw:");
@@ -336,7 +186,7 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
                 {
                     board.display();
                     cout << "Bot wins!" << endl;
-                    
+
                     win = filename.getValue(name, "Win:");
                     lose = filename.getValue(name, "Lose:") + 1;
                     draw = filename.getValue(name, "Draw:");

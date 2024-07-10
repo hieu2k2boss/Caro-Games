@@ -9,30 +9,31 @@
 #include <fstream>
 #include "../FileManager/FileManager.h"
 #include <windows.h>
+#include <memory>
 
 class Game
 {
 private:
-    Board *board;
-    Player *p; 
-    Bot *bot;
+    std::unique_ptr<Board> board;
+    std::unique_ptr<Player> p;
+    std::unique_ptr<Bot> bot;
     
     char back;
     bool exitGame = false;
     int botChoice = -1;
-    int choice ; 
+    int choice;
+
 public:
     Game();
     void startGame();
     void goToBack(Menu &menu);
-    void choiceLevelBot(Menu &mainMenu, Bot &gamePlayer) ;
+    void choiceLevelBot(Menu &mainMenu, Bot &gamePlayer);
     bool firstMove();
     void getInformationMatch();
     void Setting();
-    void resetConsole(); 
+    void resetConsole();
     void getInformationPlayer();
     ~Game();
-    
 };
 
 #endif

@@ -13,7 +13,7 @@ int Menu::choiceMainMenu()
     cout << CYAN << "* - - - MAIN MENU - - -*" << RESET << endl;
     cout << CYAN<< "1."<< RESET << " Play with other player" << endl;
     cout << CYAN<< "2."<< RESET << " Play with Bot" << endl;
-    cout << CYAN<< "3."<< RESET << " Replay" << endl;
+    cout << CYAN<< "3."<< RESET << " Watch Match" << endl;
     cout << CYAN<< "4."<< RESET << " Player's Information" << endl;
     cout << CYAN<< "5."<< RESET << " Guild" << endl;
     cout << CYAN<< "6."<< RESET << " Setting" << endl;

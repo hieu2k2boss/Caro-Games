@@ -6,14 +6,15 @@ Game::Game() {}
 
 void Game::startGame()
 {
-    Menu *menu = new Menu();
+    unique_ptr<Menu> menu = make_unique<Menu>();
     choice = menu->choiceMainMenu();
 
     while (!exitGame)
     {
-        p = new Player('X');
-        board = new Board(10);
-        bot = new Bot('X');
+        board = make_unique<Board>(10);
+        bot = make_unique<Bot>('X');
+        p = make_unique<Player>('X');
+
         switch (choice)
         {
         case 1:
@@ -35,10 +36,9 @@ void Game::startGame()
             break;
         case 5:
         {
-            FileManager *openGuild = new FileManager();
+            unique_ptr<FileManager> openGuild = make_unique<FileManager>();
             openGuild->showGuild();
             goToBack(*menu);
-            delete openGuild;
             break;
         }
         case 6:
@@ -55,20 +55,17 @@ void Game::startGame()
             break;
         }
     }
-
-    delete menu;
 }
 
 void Game::goToBack(Menu &mainMenu)
 {
-    delete p;
-    delete board;
+    p.reset();
+    board.reset();
     do
     {
         cout << "\nPress 'b' to go back to the main menu: ";
         cin >> back;
     } while (back != 'b');
-    // Quay lại menu chính sau khi người dùng bấm 'b'
     resetConsole();
     choice = mainMenu.choiceMainMenu();
 }
@@ -78,26 +75,26 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     resetConsole();
     botChoice = mainMenu.choicePlayWithBot();
     string name;
-    // int win = 0, lose = 0, draw = 0;
 
     cout << "Enter name player: ";
     cin >> name;
 
-    FileManager *file = new FileManager();
+    unique_ptr<FileManager> file = make_unique<FileManager>();
     file->createFolder(name);
 
     if (botChoice == 1) // Easy bot
     {
-        gameBot.playerWithBot1(*board, firstMove(), *file, name);
+        int simulations = 100; // Number of simulations for Monte Carlo
+        gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else if (botChoice == 2) // Normal bot
     {
-        int simulations = 10; // Number of simulations for Monte Carlo
+        int simulations = 450; // Number of simulations for Monte Carlo
         gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else if (botChoice == 3) // Hard bot
     {
-        int simulations = 100; // Number of simulations for Monte Carlo
+        int simulations = 900; // Number of simulations for Monte Carlo
         gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else
@@ -106,8 +103,6 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     }
 
     cout << "Player " << gameBot.getCurrentPlayer() << " wins!" << endl;
-
-    delete file;
 }
 
 void Game::resetConsole()
@@ -119,16 +114,15 @@ void Game::resetConsole()
 #endif
 }
 
-bool Game ::firstMove()
+bool Game::firstMove()
 {
     int firstMoveChoice;
     cout << "Do you want to go first? (1 for Yes, 0 for No): ";
     cin >> firstMoveChoice;
-    bool playerFirst = (firstMoveChoice == 1);
-    return playerFirst;
+    return firstMoveChoice == 1;
 }
 
-void Game ::getInformationPlayer()
+void Game::getInformationPlayer()
 {
     resetConsole();
 
@@ -138,7 +132,7 @@ void Game ::getInformationPlayer()
     cout << "Enter your choice: ";
     int choiceInformation;
     cin >> choiceInformation;
-    FileManager *file = new FileManager();
+    unique_ptr<FileManager> file = make_unique<FileManager>();
     if (choiceInformation == 1)
     {
         resetConsole();
@@ -149,22 +143,20 @@ void Game ::getInformationPlayer()
         resetConsole();
         file->displayTopPlayers();
     }
-
-    delete file;
 }
 
-void Game ::getInformationMatch()
+void Game::getInformationMatch()
 {
     resetConsole();
-    FileManager *file = new FileManager();
+    unique_ptr<FileManager> file = make_unique<FileManager>();
     file->showMatch();
-    delete file;
 }
 
-void Game ::Setting(){
+void Game::Setting()
+{
     resetConsole();
     int choiceSetting;
-    FileManager *file = new FileManager();
+    unique_ptr<FileManager> file = make_unique<FileManager>();
     cout << "1. Delete all data !!!" << endl;
     cout << "Enter your choice: ";
     cin >> choiceSetting;
@@ -172,7 +164,6 @@ void Game ::Setting(){
     {
         file->removeAllFilesAndFolders("H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\Status");
     }
-    delete file;
 }
 
-Game::~Game(){};
+Game::~Game() {}

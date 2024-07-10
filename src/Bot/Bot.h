@@ -8,22 +8,25 @@
 #include <ctime>
 #include <limits>
 #include <string>
+#include<thread>
+#include<mutex>
+#include <utility>
+#include <random>
+#include <atomic>
 
 class Bot : public Player
 {
 
 private:
     bool gameEnd ;
-
+    std::mutex mtx;
 public:
     Bot(char currentPlayer);
     Bot(int x, int y, char currentPlayer);
-    bool makeRandomMove(Board &board);
     bool makeMonteCarloMove(Board &board, int simulations);
     bool simulateGame(Board &board, int x, int y);
-    void playerWithBot1(Board &board, bool playerFirst, FileManager &filename, std::string name);
     void playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, std::string name);
-    
+    void simulateMove(Board &board, int x, int y, int simulations, std::atomic<int> &winCount);
     virtual ~Bot(); // Virtual destructor if Bot will be inherited further
 };
 
