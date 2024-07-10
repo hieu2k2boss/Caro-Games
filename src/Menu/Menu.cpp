@@ -1,7 +1,8 @@
-#include "Menu.h"
+#include "../../include/Menu/Menu.h"
 #include <iostream>
 
 using namespace std;
+
 Menu::Menu()
 {
 }
@@ -21,7 +22,8 @@ int Menu::choiceMainMenu()
     cout << "Enter your choice: ";
     cin >> choice;
     return choice;
-};
+}
+
 int Menu::choicePlayWithBot()
 {
     int choice;
@@ -33,7 +35,7 @@ int Menu::choicePlayWithBot()
     cout << "Enter your choice: ";
     cin >> choice;
     return choice;
-};
+}
 
 Menu::~Menu()
 {

@@ -1,5 +1,5 @@
-#include "Board.h"
-#include "../Menu/Menu.h"
+#include "../../include/Board/Board.h"
+#include "../../include/Menu/Menu.h"
 
 using namespace std;
 
@@ -65,7 +65,7 @@ void Board::undoMove()
         grid[lastMove.first][lastMove.second] = ' '; // Hoàn tác nước đi trên bảng
         moveHistory.pop();                           // Xóa nước đi khỏi stack
     }
-};
+}
 
 void Board::resetBoard()
 {

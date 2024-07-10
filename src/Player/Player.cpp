@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "../../include/Player/Player.h"
 
 using namespace std;
 
@@ -84,12 +84,12 @@ void Player::playerWithPlayer(Board &board)
     }
 };
 
-void Player::switchPlayer() { currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'; };
-
 char Player::getCurrentPlayer()
 {
     return currentPlayer;
 }
+
+void Player::switchPlayer() { currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'; };
 
 Player::~Player()
 {

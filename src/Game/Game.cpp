@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "../../include/Game/Game.h"
 
 using namespace std;
 
@@ -12,7 +12,7 @@ void Game::startGame()
     while (!exitGame)
     {
         board = make_unique<Board>(10);
-        bot = make_unique<Bot>('X');
+        bot = make_unique<Bot>('O');
         p = make_unique<Player>('X');
 
         switch (choice)
@@ -89,12 +89,12 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     }
     else if (botChoice == 2) // Normal bot
     {
-        int simulations = 450; // Number of simulations for Monte Carlo
+        int simulations = 500; // Number of simulations for Monte Carlo
         gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else if (botChoice == 3) // Hard bot
     {
-        int simulations = 900; // Number of simulations for Monte Carlo
+        int simulations = 1000; // Number of simulations for Monte Carlo
         gameBot.playerWithBotMonteCarlo(*board, firstMove(), simulations, *file, name);
     }
     else
@@ -152,8 +152,7 @@ void Game::getInformationMatch()
     file->showMatch();
 }
 
-void Game::Setting()
-{
+void Game::Setting(){
     resetConsole();
     int choiceSetting;
     unique_ptr<FileManager> file = make_unique<FileManager>();

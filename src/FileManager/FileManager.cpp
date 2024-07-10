@@ -1,14 +1,14 @@
-#include "FileManager.h"
+#include "../../include/FileManager/FileManager.h"
 
 using namespace std;
 
-FileManager::FileManager(/* args */)
+FileManager::FileManager()
 {
 }
 
 void FileManager::showGuild()
 {
-    file.open("H:\\Download\\FPT\\TaiLieu\\BaiTap\\MockTest\\src\\FileManager\\instructions.txt", std::ios::binary);
+    file.open("H:\\Download\\FPT\\TaiLieu\\BaiTap\\Caro\\src\\FileManager\\instructions.txt", std::ios::binary);
 
     if (!file)
     {

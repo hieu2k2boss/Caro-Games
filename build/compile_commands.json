@@ -1,0 +1,44 @@
+[
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/Board/Board.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Board/Board.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Board/Board.cpp",
+  "output": "CMakeFiles/Caro.dir/src/Board/Board.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/Bot/Bot.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Bot/Bot.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Bot/Bot.cpp",
+  "output": "CMakeFiles/Caro.dir/src/Bot/Bot.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/FileManager/FileManager.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/FileManager/FileManager.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/FileManager/FileManager.cpp",
+  "output": "CMakeFiles/Caro.dir/src/FileManager/FileManager.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/Game/Game.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Game/Game.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Game/Game.cpp",
+  "output": "CMakeFiles/Caro.dir/src/Game/Game.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/Menu/Menu.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Menu/Menu.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Menu/Menu.cpp",
+  "output": "CMakeFiles/Caro.dir/src/Menu/Menu.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/Player/Player.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Player/Player.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/Player/Player.cpp",
+  "output": "CMakeFiles/Caro.dir/src/Player/Player.cpp.obj"
+},
+{
+  "directory": "H:/Download/FPT/TaiLieu/BaiTap/CARO/build",
+  "command": "C:/mingw64/bin/c++.exe  @CMakeFiles/Caro.dir/includes_CXX.rsp -g -o CMakeFiles/Caro.dir/src/main.cpp.obj -c H:/Download/FPT/TaiLieu/BaiTap/CARO/src/main.cpp",
+  "file": "H:/Download/FPT/TaiLieu/BaiTap/CARO/src/main.cpp",
+  "output": "CMakeFiles/Caro.dir/src/main.cpp.obj"
+}
+]
