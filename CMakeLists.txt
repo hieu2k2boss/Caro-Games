@@ -11,3 +11,4 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Tạo chương trình
 add_executable(Caro ${SOURCES})
+

@@ -1,0 +1,4 @@
+Name player: hieut
+Win: 1
+Lose: 0
+Draw: 0

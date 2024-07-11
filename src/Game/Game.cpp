@@ -105,8 +105,7 @@ void Game::choiceLevelBot(Menu &mainMenu, Bot &gameBot)
     cout << "Player " << gameBot.getCurrentPlayer() << " wins!" << endl;
 }
 
-void Game::resetConsole()
-{
+void Game::resetConsole(){
 #ifdef _WIN32
     system("CLS");
 #else

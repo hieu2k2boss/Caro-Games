@@ -392,7 +392,10 @@ CMakeFiles/Caro.dir/src/Game/Game.cpp.obj: \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/uniform_int_dist.h \
  C:/mingw64/x86_64-w64-mingw32/include/tchar.h \
  C:/mingw64/x86_64-w64-mingw32/include/sec_api/tchar_s.h \
- H:/Download/FPT/TaiLieu/BaiTap/CARO/include/FileManager/FileManager.h \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/thread \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/chrono \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ratio \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/parse_numbers.h \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/memory \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_raw_storage_iter.h \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/concurrence.h \
@@ -405,4 +408,8 @@ CMakeFiles/Caro.dir/src/Game/Game.cpp.obj: \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/shared_ptr_atomic.h \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/atomic_base.h \
  C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/atomic_lockfree_defines.h \
- C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/auto_ptr.h
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/auto_ptr.h \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/mutex \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/std_mutex.h \
+ C:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/atomic \
+ H:/Download/FPT/TaiLieu/BaiTap/CARO/include/FileManager/FileManager.h

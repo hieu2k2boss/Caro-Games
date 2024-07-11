@@ -1,5 +1,6 @@
 #include "../../include/Bot/Bot.h"
 
+
 using namespace std;
 
 Bot::Bot(char currentPlayer) : Player(currentPlayer) {}
@@ -45,7 +46,7 @@ bool Bot::simulateGame(Board &board, int x, int y)
 
 bool Bot::makeMonteCarloMove(Board &board, int simulations)
 {
-    srand(time(0));
+    srand(time(0)); // Random number
     vector<pair<int, int>> validMoves;
 
     // Get all valid moves
@@ -60,19 +61,44 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
         }
     }
 
-    vector<int> winCounts(validMoves.size(), 0);
+    vector<atomic<int>> winCounts(validMoves.size());
+    for (auto &count : winCounts) {
+        count = 0;
+    }
+    vector<thread> threads;
+    mutex mtx;
 
-    // Simulate each move
-    for (int i = 0; i < validMoves.size(); ++i)
-    {
-        for (int j = 0; j < simulations; ++j)
+    // Lambda function to simulate games
+    auto simulate = [&](int start, int end) {
+        for (int i = start; i < end; ++i)
         {
-            Board simulationBoard = board;
-            simulationBoard.updateBoard(validMoves[i].first, validMoves[i].second, currentPlayer);
-            if (simulateGame(simulationBoard, validMoves[i].first, validMoves[i].second))
+            for (int j = 0; j < simulations; ++j)
             {
-                winCounts[i]++;
+                Board simulationBoard = board;
+                simulationBoard.updateBoard(validMoves[i].first, validMoves[i].second, currentPlayer);
+                if (simulateGame(simulationBoard, validMoves[i].first, validMoves[i].second))
+                {
+                    winCounts[i]++;
+                }
             }
+        }
+    };
+
+    int numThreads = thread::hardware_concurrency();
+    int chunkSize = validMoves.size() / numThreads;
+
+    for (int i = 0; i < numThreads; ++i)
+    {
+        int start = i * chunkSize;
+        int end = (i == numThreads - 1) ? validMoves.size() : start + chunkSize;
+        threads.emplace_back(simulate, start, end);
+    }
+
+    for (auto &t : threads)
+    {
+        if (t.joinable())
+        {
+            t.join();
         }
     }
 
@@ -93,7 +119,7 @@ bool Bot::makeMonteCarloMove(Board &board, int simulations)
     return true;
 }
 
-void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, std::string name)
+void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulations, FileManager &filename, string name)
 {
     int turn = 0;
 
@@ -189,3 +215,5 @@ void Bot::playerWithBotMonteCarlo(Board &board, bool playerFirst, int simulation
 }
 
 Bot::~Bot() {}
+
+
